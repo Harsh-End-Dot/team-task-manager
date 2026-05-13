@@ -1,0 +1,17 @@
+{
+  "name": "team-task-manager",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": ["server", "client"],
+  "scripts": {
+    "dev": "node scripts/check-db-url.mjs && concurrently -n server,client -c blue,green \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w client && npm run build -w server && node scripts/copy-client.mjs",
+    "start": "npm run db:migrate -w server && npm run start -w server",
+    "test:smoke": "node scripts/smoke-api.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
