@@ -62,6 +62,20 @@ npm run start
 
 6. After deploy, open the generated public URL. Sign up, create a project, invite teammates by email (they must register first), and manage tasks.
 
+### Railway: online then crashes
+
+1. **`prisma` missing at runtime** — Production installs often skip `devDependencies`. This repo lists **`prisma` under `server` `dependencies`** so `npm start` can run `prisma migrate deploy`.
+
+2. **`JWT_SECRET` not set** — In production the server exits if `JWT_SECRET` is missing or still the dev default. Set a long random value in Railway **Variables**.
+
+3. **`DATABASE_URL` not on the web service** — Reference or copy Postgres’s `DATABASE_URL` onto the **same** service that runs `npm start`.
+
+4. **Port / bind** — The server listens on **`0.0.0.0`** and **`PORT`** from Railway.
+
+5. **Health checks** — Use **`/health`** or **`/api/health`** if you configure HTTP health checks.
+
+Always read the latest **Deploy logs** for `[server]` or Prisma messages.
+
 ## API overview
 
 | Method | Path | Notes |

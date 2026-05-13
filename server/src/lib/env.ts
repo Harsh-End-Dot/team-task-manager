@@ -25,10 +25,15 @@ export const env = {
 };
 
 export function assertProductionEnv(): void {
-  if (env.NODE_ENV === "production") {
-    if (!env.DATABASE_URL) throw new Error("DATABASE_URL required in production");
-    if (env.JWT_SECRET === "dev-only-change-in-production") {
-      throw new Error("Set JWT_SECRET in production");
-    }
+  if (env.NODE_ENV !== "production") return;
+  if (!env.DATABASE_URL?.trim()) {
+    console.error("[server] DATABASE_URL is required in production. Add it in Railway → Variables.");
+    process.exit(1);
+  }
+  if (!env.JWT_SECRET || env.JWT_SECRET === "dev-only-change-in-production") {
+    console.error(
+      "[server] JWT_SECRET must be set in production (Railway Variables). Use a long random string, not the default."
+    );
+    process.exit(1);
   }
 }

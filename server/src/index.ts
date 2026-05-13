@@ -42,6 +42,11 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });
 
+// Some platforms default health checks to /health (not /api/health).
+app.get("/health", (_req, res) => {
+  res.json({ ok: true });
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/projects/:projectId/members", memberRoutes);
 app.use("/api/projects/:projectId/tasks", taskRoutes);
@@ -62,6 +67,6 @@ app.use((err: unknown, _req: express.Request, res: express.Response, _next: expr
   res.status(500).json({ error: "Internal server error" });
 });
 
-app.listen(env.PORT, () => {
-  console.log(`Server listening on port ${env.PORT}`);
+app.listen(env.PORT, "0.0.0.0", () => {
+  console.log(`Server listening on 0.0.0.0:${env.PORT}`);
 });
